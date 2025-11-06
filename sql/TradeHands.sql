@@ -1,12 +1,12 @@
 -- TradeHands Database Schema for Azure PostgreSQL
 
-DROP TABLE IF EXISTS interests CASCADE;
-DROP TABLE IF EXISTS business_listings CASCADE;
-DROP TABLE IF EXISTS buyers CASCADE;
-DROP TABLE IF EXISTS app_users CASCADE;
+DROP TABLE IF EXISTS ProfileMatch CASCADE;
+DROP TABLE IF EXISTS BusinessListing CASCADE;
+DROP TABLE IF EXISTS BuyerProfile CASCADE;
+DROP TABLE IF EXISTS AppUser CASCADE;
 
 -- User accounts
-CREATE TABLE app_users (
+CREATE TABLE AppUser (
     user_id SERIAL PRIMARY KEY,
     first_name VARCHAR(100),
     last_name  VARCHAR(100),
@@ -16,7 +16,7 @@ CREATE TABLE app_users (
 );
 
 -- Business Listings
-CREATE TABLE business_listings (
+CREATE TABLE BusinessListing (
     business_id SERIAL PRIMARY KEY,
     owner_id INT REFERENCES app_users(user_id) ON DELETE SET NULL,
     name VARCHAR(255) NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE business_listings (
 );
 
 -- Buyers
-CREATE TABLE buyers (
+CREATE TABLE BuyerProfile (
     buyer_id SERIAL PRIMARY KEY,
     user_id INT REFERENCES app_users(user_id) ON DELETE SET NULL,
     name VARCHAR(100),
@@ -46,12 +46,12 @@ CREATE TABLE buyers (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
--- Buyers expressing interest in listings
-CREATE TABLE interests (
+-- Matches between buyers and owners
+CREATE TABLE ProfileMatch (
     interest_id SERIAL PRIMARY KEY,
     buyer_id INT REFERENCES buyers(buyer_id) ON DELETE CASCADE,
     business_id INT REFERENCES business_listings(business_id) ON DELETE CASCADE,
-    message TEXT,
+    rating INT,     --percent that represents how strong the match is
     created_at TIMESTAMP DEFAULT NOW(),
     UNIQUE (buyer_id, business_id)
 );
@@ -80,34 +80,9 @@ VALUES
 ('Sandra', 'Miami, FL', 'Healthcare Investor', ARRAY['Healthcare']),
 ('Alex', 'Seattle, WA', 'Tech Acquirer', ARRAY['Tech']);
 
--- interests??
-INSERT INTO interests (buyer_id, business_id, message)
+INSERT INTO ProfileMatch (buyer_id, business_id, rating)
 VALUES
-(1, 1, 'Interested in acquiring TechStart Solutions for expansion.'),
-(2, 2, 'Would like to discuss the boutique''s sales data.'),
-(4, 4, 'Passionate about breweries, seeking collaboration.');
-
-
--- SAMPLE QUERIES
-
--- 1. Get all business listings
-SELECT * FROM business_listings ORDER BY business_id;
-
--- 2. Search listings by keyword
-SELECT * FROM business_listings
-WHERE LOWER(name) LIKE LOWER('%tech%')
-   OR LOWER(industry) LIKE LOWER('%tech%')
-   OR LOWER(location) LIKE LOWER('%tech%');
-
--- 3. Show all buyers interested in each business
-SELECT b.name AS buyer_name, bl.name AS business_name, i.message, i.created_at
-FROM interests i
-JOIN buyers b ON i.buyer_id = b.buyer_id
-JOIN business_listings bl ON i.business_id = bl.business_id
-ORDER BY bl.business_id;
-
--- 4. Get all businesses owned by a user
-SELECT bl.* FROM business_listings bl
-JOIN app_users u ON u.user_id = bl.owner_id
-WHERE u.email = 'david@techstartsolutions.com';
+(1, 1, 90),
+(2, 2, 83),
+(4, 4, 65);
 
