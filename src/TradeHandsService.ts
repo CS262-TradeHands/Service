@@ -77,7 +77,7 @@ function readHello(_request: Request, response: Response): void {
 function readUser(request: Request, response: Response, next: NextFunction): void {
     db.oneOrNone('SELECT * FROM AppUser WHERE id=${id}', request.params)
         .then((data: string | null): void => {
-            
+            returnDataOr404(response, data);
         })
         .catch((error: Error): void => {
             
