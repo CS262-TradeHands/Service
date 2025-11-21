@@ -80,6 +80,6 @@ function readUser(request: Request, response: Response, next: NextFunction): voi
             returnDataOr404(response, data);
         })
         .catch((error: Error): void => {
-            
+            next(error);
         });
 }
