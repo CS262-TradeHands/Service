@@ -11,7 +11,7 @@ import express from 'express';
 import pgPromise from 'pg-promise';
 
 // Import types for compile-time checking.
-import type { Request, Response, } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 
 
 // Set up the database
@@ -77,8 +77,9 @@ function readHello(_request: Request, response: Response): void {
 function readUser(request: Request, response: Response, next: NextFunction): void {
     db.oneOrNone('SELECT * FROM AppUser WHERE id=${id}', request.params)
         .then((data: string | null): void => {
+            
         })
         .catch((error: Error): void => {
-            next(error);
+            
         });
 }
