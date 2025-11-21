@@ -11,7 +11,7 @@ import express from 'express';
 import pgPromise from 'pg-promise';
 
 // Import types for compile-time checking.
-import type { Request, Response, NextFunction } from 'express';
+import type { Request, Response, } from 'express';
 
 
 // Set up the database
@@ -30,12 +30,12 @@ const router = express.Router();
 
 router.use(express.json());
 router.get('/', readHello);
-
+router.get('/users/:id', readUser);
 
 app.use(router);
 
 // Custom error handler - must be defined AFTER all routes
-app.use((err: Error, _req: Request, res: Response, _next: NextFunction): void => {
+app.use((err: Error, _req: Request, res: Response): void => {
     // Log the full error server-side for debugging
     console.error('Error:', err.message);
     console.error('Stack:', err.stack);
@@ -69,4 +69,16 @@ function returnDataOr404(response: Response, data: unknown): void {
  */
 function readHello(_request: Request, response: Response): void {
     response.send('Hello, TradeHands!');
+}
+
+/**
+ * Retrieves a specific user by ID.
+ */
+function readUser(request: Request, response: Response, next: NextFunction): void {
+    db.oneOrNone('SELECT * FROM AppUser WHERE id=${id}', request.params)
+        .then((data: string | null): void => {
+        })
+        .catch((error: Error): void => {
+            next(error);
+        });
 }
