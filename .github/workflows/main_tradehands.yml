@@ -13,6 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
+      id-token: write
       contents: read  # required for actions/checkout
 
     steps:
@@ -45,3 +46,4 @@ jobs:
           app-name: 'TradeHands'
           slot-name: 'Production'
           package: .
+
