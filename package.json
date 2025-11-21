@@ -2,16 +2,15 @@
     "name": "cs262-webservice",
     "version": "1.0.0",
     "description": "CS 262 Web service",
-    "main": "src/monopolyService.ts",
+    "main": "src/TradeHandsService.ts",
     "type": "module",
-    "author": "kvlinden",
+    "author": "TradeHands Team",
     "license": "ISC",
     "engines": {
         "node": "22.x"
     },
     "scripts": {
-        "start": "node --experimental-strip-types src/monopolyService.ts",
-        "direct": "node --experimental-strip-types src/monopolyDirect.ts",
+        "start": "node --experimental-strip-types src/TradeHandsService.ts",
         "type-check": "tsc --noEmit",
         "lint": "eslint ."
     },
