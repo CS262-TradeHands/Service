@@ -39,7 +39,7 @@ jobs:
           name: node-app
           path: release.zip
 
-  depoly:
+  deploy:
     runs-on: ubuntu-latest
     needs: build
 

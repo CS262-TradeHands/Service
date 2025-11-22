@@ -12,7 +12,7 @@ import pgPromise from 'pg-promise';
 
 // Import types for compile-time checking.
 import type { Request, Response, NextFunction } from 'express';
-import type { User } from "./user.js";
+import type { User } from "./User.js";
 
 
 // Set up the database
@@ -37,10 +37,12 @@ router.get('/users/:id', readUser);
 app.use(router);
 
 // Custom error handler - must be defined AFTER all routes
-app.use((err: Error, _req: Request, res: Response): void => {
+app.use((err: Error, _req: Request, res: Response, _next: NextFunction): void => {
     // Log the full error server-side for debugging
-    console.error('Error:', err.message);
-    console.error('Stack:', err.stack);
+    console.error('Error:', err?.message);
+    console.error('Stack:', err?.stack);
+
+    void _next; // make lint happy
 
     // Send generic error to client (never expose internal details)
     res.status(500).json({
