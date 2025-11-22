@@ -12,6 +12,7 @@ import pgPromise from 'pg-promise';
 
 // Import types for compile-time checking.
 import type { Request, Response, NextFunction } from 'express';
+import type { User } from "./user.js";
 
 
 // Set up the database
@@ -30,6 +31,7 @@ const router = express.Router();
 
 router.use(express.json());
 router.get('/', readHello);
+router.get('/users', readUsers)
 router.get('/users/:id', readUser);
 
 app.use(router);
@@ -72,11 +74,25 @@ function readHello(_request: Request, response: Response): void {
 }
 
 /**
+ * Retrieves all users from the database.
+ */
+function readUsers(_request: Request, response: Response, next: NextFunction): void {
+    db.manyOrNone('SELECT * FROM AppUser')
+        .then((data: User[]): void => {
+            // data is a list, never null, so returnDataOr404 isn't needed.
+            response.send(data);
+        })
+        .catch((error: Error): void => {
+            next(error);
+        });
+}
+
+/**
  * Retrieves a specific user by ID.
  */
 function readUser(request: Request, response: Response, next: NextFunction): void {
-    db.oneOrNone('SELECT * FROM AppUser WHERE id=${id}', request.params)
-        .then((data: string | null): void => {
+    db.oneOrNone('SELECT * FROM AppUser WHERE user_id=${id}', request.params)
+        .then((data: User | null): void => {
             returnDataOr404(response, data);
         })
         .catch((error: Error): void => {
