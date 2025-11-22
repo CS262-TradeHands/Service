@@ -1,18 +1,16 @@
 {
-  "name": "cs262-webservice",
+  "name": "tradehands-webservice",
   "version": "1.0.0",
-  "description": "CS 262 Web service",
-  "main": "dist/TradeHandsService.js",
+  "description": "TradeHands App Web service",
+  "main": "src/TradeHandsService.ts",
   "type": "module",
   "author": "TradeHands Team",
   "license": "ISC",
   "engines": {
-    "node": "20.x"
+    "node": "22.x"
   },
   "scripts": {
-    "build": "tsc",
-    "prestart": "npm run build",
-    "start": "node dist/TradeHandsService.js",
+    "start": "node --experimental-strip-types src/TradeHandsService.ts",
     "type-check": "tsc --noEmit",
     "lint": "eslint ."
   },
