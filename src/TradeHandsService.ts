@@ -13,6 +13,7 @@ import pgPromise from 'pg-promise';
 // Import types for compile-time checking.
 import type { Request, Response, NextFunction } from 'express';
 import type { User } from "./User.js";
+import type { Buyer } from "./Buyer.js";
 
 
 // Set up the database
@@ -31,8 +32,11 @@ const router = express.Router();
 
 router.use(express.json());
 router.get('/', readHello);
-router.get('/users', readUsers)
+router.get('/users', readUsers);
 router.get('/users/:id', readUser);
+
+router.get('/buyers', readBuyers);
+router.get('/buyers/:id', readBuyer);
 
 app.use(router);
 
@@ -95,6 +99,32 @@ function readUsers(_request: Request, response: Response, next: NextFunction): v
 function readUser(request: Request, response: Response, next: NextFunction): void {
     db.oneOrNone('SELECT * FROM AppUser WHERE user_id=${id}', request.params)
         .then((data: User | null): void => {
+            returnDataOr404(response, data);
+        })
+        .catch((error: Error): void => {
+            next(error);
+        });
+}
+
+/**
+ * Retrieves all buyers from the database.
+ */
+function readBuyers(_request: Request, response: Response, next: NextFunction): void {
+    db.manyOrNone('SELECT * FROM BuyerProfile')
+        .then((data: Buyer[]): void => {
+            response.send(data);
+        })
+        .catch((error: Error): void => {
+            next(error);
+        });
+}
+
+/**
+ * Retrieves a specific buyer by ID.
+ */
+function readBuyer(request: Request, response: Response, next: NextFunction): void {
+    db.oneOrNone('SELECT * FROM BuyerProfile WHERE buyer_id=${id}', request.params)
+        .then((data: Buyer | null): void => {
             returnDataOr404(response, data);
         })
         .catch((error: Error): void => {
