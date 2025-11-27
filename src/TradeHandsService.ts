@@ -14,6 +14,7 @@ import pgPromise from 'pg-promise';
 import type { Request, Response, NextFunction } from 'express';
 import type { User } from "./User.js";
 import type { Buyer } from "./Buyer.js";
+import type { Listing } from "./Listing.js"
 
 
 // Set up the database
@@ -37,6 +38,9 @@ router.get('/users/:id', readUser);
 
 router.get('/buyers', readBuyers);
 router.get('/buyers/:id', readBuyer);
+
+router.get('/listings', readListings);
+router.get('/listings/:id', readListing);
 
 app.use(router);
 
@@ -125,6 +129,32 @@ function readBuyers(_request: Request, response: Response, next: NextFunction): 
 function readBuyer(request: Request, response: Response, next: NextFunction): void {
     db.oneOrNone('SELECT * FROM BuyerProfile WHERE buyer_id=${id}', request.params)
         .then((data: Buyer | null): void => {
+            returnDataOr404(response, data);
+        })
+        .catch((error: Error): void => {
+            next(error);
+        });
+}
+
+/**
+ * Retrieves all listings from the database.
+ */
+function readListings(_request: Request, response: Response, next: NextFunction): void {
+    db.manyOrNone('SELECT * FROM BusinessListing')
+        .then((data: Listing[]): void => {
+            response.send(data);
+        })
+        .catch((error: Error): void => {
+            next(error);
+        });
+}
+
+/**
+ * Retrieves a specific listing by ID.
+ */
+function readListing(request: Request, response: Response, next: NextFunction): void {
+    db.oneOrNone('SELECT * FROM BusinessListing WHERE business_id=${id}', request.params)
+        .then((data: Listing | null): void => {
             returnDataOr404(response, data);
         })
         .catch((error: Error): void => {
