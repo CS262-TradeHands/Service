@@ -90,14 +90,14 @@ INSERT INTO AppUser (first_name, last_name, email, phone, profile_image_url, pas
 --Special
 ('Holger', 'Woerner', 'Holger.Woerner@bakery.com', '491635551584', NULL, 'hash12', true, false);
 
-INSERT INTO BusinessListing (owner_id, name, industry, asking_price_lower_bound, asking_price_upper_bound, city, state, country, description, employees, years_in_operation, annual_revenue, monthly_revenue, profit_margin, timeline, website)
+INSERT INTO BusinessListing (owner_id, name, industry, asking_price_lower_bound, asking_price_upper_bound, city, state, country, description, employees, years_in_operation, annual_revenue, monthly_revenue, profit_margin, timeline, website, image_url)
 VALUES
-(1, 'TechStart Solutions', 'Tech', 250000, 300000, 'San Francisco', 'California', 'USA', 'Profitable SaaS company with recurring revenue and growing customer base.', 8, 5, 500000, 42000, 35, 3, 'www.techstartsolutions.com'),
-(2, 'Bella''s Boutique', 'Retail', 150000, 200000, 'Austin', 'Texas', 'USA', 'Established women''s clothing boutique in prime downtown location with loyal customer base.', 3, 7, 250000, 21000, 20, 5, NULL),
-(3, 'Green Clean Services', 'Service', 80000, 120000, 'Denver', 'Colorado', 'USA', 'Eco-friendly cleaning service with commercial and residential clients.', 12, 4, 300000, 25000, 28, 12, NULL),
-(4, 'Craft Brewery Co.', 'Food & Beverage', 400000, 500000, 'Portland', 'Oregon', 'USA', 'Popular local brewery with taproom and distribution network.', 15, 6, 600000, 50000, 32, 9, NULL),
-(5, 'MediCare Plus', 'Healthcare', 600000, 750000, 'Miami', 'Florida', 'USA', 'Well-established medical practice with multiple locations.', 25, 12, 1000000, 83000, 40, 7, NULL),
-(12, 'Backerei Woerner', 'Food & Beverage', 750000, 1000000, 'Jettingen', NULL, 'Germany', 'Delicious bakery with incredible family legacy.', 15, 250, 1000000, 111000, 42, 8, 'www.baeckerei-holger-woerner.de');
+(1, 'TechStart Solutions', 'Tech', 250000, 300000, 'San Francisco', 'California', 'USA', 'Profitable SaaS company with recurring revenue and growing customer base.', 8, 5, 500000, 42000, 35, 3, 'www.techstartsolutions.com', 'https://cybercraftinc.com/wp-content/uploads/2019/06/pexels-fauxels-3183150-1-scaled.webp'),
+(2, 'Bella''s Boutique', 'Retail', 150000, 200000, 'Austin', 'Texas', 'USA', 'Established women''s clothing boutique in prime downtown location with loyal customer base.', 3, 7, 250000, 21000, 20, 5, NULL, 'https://assets.simpleviewinc.com/simpleview/image/upload/crm/marblefallstx/trendyb_2349D3D3-C7F4-034B-0DDAA4221E96B06C-2349cc950889e0e_234a0708-0d79-3c23-df2be3bd2d89270e.jpg'),
+(3, 'Green Clean Services', 'Service', 80000, 120000, 'Denver', 'Colorado', 'USA', 'Eco-friendly cleaning service with commercial and residential clients.', 12, 4, 300000, 25000, 28, 12, NULL, 'https://cdn.prod.website-files.com/60ff934f6ded2d17563ab9dd/61392e6b85cca9544875c7d2_shutterstock_589490129.jpeg'),
+(4, 'Craft Brewery Co.', 'Food & Beverage', 400000, 500000, 'Portland', 'Oregon', 'USA', 'Popular local brewery with taproom and distribution network.', 15, 6, 600000, 50000, 32, 9, NULL, 'https://beermaverick.com/wp-content/uploads/2021/02/EmptyTaproomFeb2020.jpg'),
+(5, 'MediCare Plus', 'Healthcare', 600000, 750000, 'Miami', 'Florida', 'USA', 'Well-established medical practice with multiple locations.', 25, 12, 1000000, 83000, 40, 7, NULL, 'https://media.istockphoto.com/id/181553727/photo/outpatient-surgery-center.jpg?s=612x612&w=0&k=20&c=TSOFoFo6VWkBLtmvTgcsngxYmn3I677ilQxhoAbzfnE='),
+(12, 'Backerei Woerner', 'Food & Beverage', 750000, 1000000, 'Jettingen', NULL, 'Germany', 'Delicious bakery with incredible family legacy.', 15, 250, 1000000, 111000, 42, 8, 'www.baeckerei-holger-woerner.de', 'https://www.baeckerei-holger-woerner.de/s/cc_images/cache_2479764142.png?t=1748448406');
 
 INSERT INTO BuyerProfile (user_id, city, state, country, title, industries, about, budget_range_lower, budget_range_higher, experience, timeline, size_preference, linkedin_url)
 VALUES
