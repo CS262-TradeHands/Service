@@ -28,6 +28,7 @@ export interface Listing {
 }
 
 export interface ListingInput {
+    owner_id: number;
     name: string;
     industry: string;
     city: string;

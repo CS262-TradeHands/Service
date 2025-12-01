@@ -24,6 +24,7 @@ export interface Buyer {
 }
 
 export interface BuyerInput {
+    user_id: number;
     title: string;
     about: string;
     experience: number;
