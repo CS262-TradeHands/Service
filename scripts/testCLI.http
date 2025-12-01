@@ -1,0 +1,67 @@
+/* Simple curl tests of the user API endpoints.
+
+export SERVICE_URL=https://tradehands-bpgwcja7g5eqf2dp.canadacentral-01.azurewebsites.net
+
+curl --request GET \
+        ${SERVICE_URL}/users
+
+curl --request POST \
+        --header "Content-Type: application/json" \
+        --data '{"first_name":"Micah", "last_name":"SleepHill", "email":"micah@calvin.edu", "phone":"555345123", "passwordHash":"hash26", "profileImgUrl":""}' \
+        ${SERVICE_URL}/users
+
+curl --request PUT \
+        --header "Content-Type: application/json" \
+        --data '{"first_name":"Steve", "last_name":"Jones", "email":"steve@calvin.edu", "phone":"5558888888", "passwordHash":"hash67", "profileImgUrl":""}' \
+        ${SERVICE_URL}/users/4
+
+curl --request DELETE \
+        ${SERVICE_URL}/users/4
+
+*/
+
+/*
+export SERVICE_URL=http://localhost:3000
+
+curl --request POST \
+        --header "Content-Type: application/json" \
+        --data '{
+            "user_id": 1,
+            "title": "Tech Enthusiast",
+            "about": "Looking to invest in innovative tech startups.",
+            "experience": 10,
+            "budget_range_lower": 500000,
+            "budget_range_higher": 2000000,
+            "city": "San Francisco",
+            "state": "CA",
+            "country": "USA",
+            "industries": ["Technology", "Software"],
+            "size_preference": "Small",
+            "timeline": "6 months",
+            "linkedin_url": ""
+            }'
+        ${SERVICE_URL}/buyers
+
+curl --request POST \
+        -header "Content-Type: application/json" \
+        --data '{
+            "owner_id": 2,
+            "name": "Tech Solutions Inc.",
+            "industry": "Technology",
+            "city": "Austin",
+            "state": "TX",
+            "country": "USA",
+            "image_url": "",
+            "asking_price_upper_bound": 1500000,
+            "asking_price_lower_bound": 1000000,
+            "description": "A leading provider of tech solutions for small businesses.",
+            "employees": 25,
+            "years_in_operation": 5,
+            "annual_revenue": 3000000,
+            "monthly_revenue": 250000,
+            "profit_margin": 20,
+            "timeline": "12 months",
+            "website": ""
+            }'
+        ${SERVICE_URL}/listings
+*/

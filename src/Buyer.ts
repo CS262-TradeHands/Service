@@ -11,16 +11,16 @@ export interface Buyer {
     title: string;
     about: string;
     experience: number;
-    budgetLow: number;
-    budgetHigh: number;
+    budget_range_lower: number;
+    budget_range_higher: number;
     city: string;
     state: string;
     country: string;
     industries: string[];
-    sizePreferences: string;
+    size_preference: string;
     timeline: number;
-    linkedIn: string;
-    createdAt: string;
+    linkedin_url: string;
+    created_at: string;
 }
 
 export interface BuyerInput {
@@ -28,13 +28,13 @@ export interface BuyerInput {
     title: string;
     about: string;
     experience: number;
-    budgetLow: number;
-    budgetHigh: number;
+    budget_range_lower: number;
+    budget_range_higher: number;
     city: string;
     state: string;
     country: string;
     industries: string[];
-    sizePreferences: string;
+    size_preference: string;
     timeline: number;
-    linkedIn?: string;
+    linkedin_url: string;
 }

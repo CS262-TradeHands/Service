@@ -11,11 +11,11 @@ export interface User {
     last_name: string;
     email: string;
     phone?: string;
-    passwordHash: string;
-    profileImgUrl?: string;
+    password_hash: string;
+    profile_image_url?: string;
     verified: boolean;
     private: boolean;
-    createdAt: string;
+    created_at: string;
 }
 
 export interface UserInput {
@@ -23,6 +23,6 @@ export interface UserInput {
     last_name: string;
     email: string;
     phone?: string;
-    passwordHash: string;
-    profileImgUrl?: string;
+    password_hash: string;
+    profile_image_url?: string;
 }

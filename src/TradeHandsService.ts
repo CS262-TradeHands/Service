@@ -117,18 +117,17 @@ function readUser(request: Request, response: Response, next: NextFunction): voi
 
 /**
  * Create a new user.
- * Expects body with: first_name, last_name, email, phone?, passwordHash, profileImgUrl?, verified?, private?
+ * Expects body with: first_name, last_name, email, phone?, password_hash, profile_image_url?, verified?, private?
  * Returns the created user (including user_id).
  */
 function createUser(request: Request, response: Response, next: NextFunction): void {
-
     db.one(
-        `INSERT INTO AppUser (first_name, last_name, email, phone, password_hash, profile_image_url)
-         VALUES ($(first_name), $(last_name), $(email), $(phone), $(password_hash), $(profile_image_url))
+        `INSERT INTO AppUser (first_name, last_name, email, phone, password_hash, profile_image_url, verified, private)
+         VALUES ($(first_name), $(last_name), $(email), $(phone), $(password_hash), $(profile_image_url), false, false)
          RETURNING user_id`,
         request.body as UserInput
     )
-        .then((data: unknown): void => {
+        .then((data: {user_id: number}): void => {
             response.status(201).send(data);
         })
         .catch((error: Error): void => {
@@ -164,12 +163,11 @@ function readBuyer(request: Request, response: Response, next: NextFunction): vo
 
 /**
  * Create a new buyer profile.
- * Expects body with: user_id, title, about, experience, budgetLow, budgetHigh, city, state, country,
- * industries (string[]), sizePreferences, timeline, linkedIn?
+ * Expects body with: user_id, title, about, experience, budget_range_lower, budget_range_higher, city, state, country,
+ * industries (string[]), size_preference, timeline, linkedin_url?
  * Returns the created buyer profile (including buyer_id).
  */
 function createBuyer(request: Request, response: Response, next: NextFunction): void {
-
     db.one(
         `INSERT INTO BuyerProfile (user_id, title, about, experience, budget_range_lower, budget_range_higher,
                                    city, state, country, industries, size_preference, timeline, linkedin_url)
@@ -214,12 +212,11 @@ function readListing(request: Request, response: Response, next: NextFunction): 
 
 /**
  * Create a new business listing.
- * Expects body with: owner_id, name, industry, city, state, country, image_url?, priceUpper, priceLower,
- * description, employees, yearOperations, annualRevenue, monthlyRevenue, profitMargin, timeline, website?
+ * Expects body with: owner_id, name, industry, city, state, country, image_url?, asking_price_upper_bound, asking_price_lower_bound,
+ * description, employees, years_in_operation, annual_revenue, monthly_revenue, profit_margin, timeline, website?
  * Returns the created listing (including business_id).
  */
 function createListing(request: Request, response: Response, next: NextFunction): void {
-
     db.one(
         `INSERT INTO BusinessListing (owner_id, name, industry, city, state, country, image_url,
                                       asking_price_upper_bound, asking_price_lower_bound, description, employees,

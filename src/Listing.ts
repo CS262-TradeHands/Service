@@ -14,17 +14,17 @@ export interface Listing {
     state: string;
     country: string;
     image_url?: string;
-    priceUpper: number;
-    priceLower: number;
+    asking_price_upper_bound: number;
+    asking_price_lower_bound: number;
     description: string;
     employees: string;
-    yearOperations: number;
-    annualRevenue: number;
-    monthlyRevenue: number;
-    profitMargin: number;
+    years_in_operation: number;
+    annual_revenue: number;
+    monthly_revenue: number;
+    profit_margin: number;
     timeline: number;
     website?: string;
-    createdAt: string;
+    created_at: string;
 }
 
 export interface ListingInput {
@@ -35,14 +35,14 @@ export interface ListingInput {
     state: string;
     country: string;
     image_url?: string;
-    priceUpper: number;
-    priceLower: number;
+    asking_price_upper_bound: number;
+    asking_price_lower_bound: number;
     description: string;
     employees: string;
-    yearOperations: number;
-    annualRevenue: number;
-    monthlyRevenue: number;
-    profitMargin: number;
+    years_in_operation: number;
+    annual_revenue: number;
+    monthly_revenue: number;
+    profit_margin: number;
     timeline: number;
     website?: string;
 }
