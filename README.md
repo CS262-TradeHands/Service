@@ -16,6 +16,9 @@ At this URL, the following endpoints are implemented:
 * POST `/users` &mdash; adds a user account to the database and returns it's automatically generated user id
 * POST `/buyers` &mdash; adds a buyer profile to the database and returns it's automatically generated buyer id
 * POST `/listings` &mdash; adds a business listing to the database and returns it's automatically generated business id
+* DELETE `/users/:id` &mdash; deletes a user by id and all associated listings and buyer profiles, returning the deleted id
+* DELETE `/buyers/:id` &mdash; deletes a buyer profile by id and all associated matches, returning the deleted id
+* DELETE `/listings/:id` &mdash; deletes a listing by id and all associated matches, returning the deleted id
 
 It is based on the standard Azure App Service tutorial for Node.js.
 
