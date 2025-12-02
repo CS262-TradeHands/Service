@@ -7,12 +7,12 @@ curl --request GET \
 
 curl --request POST \
         --header "Content-Type: application/json" \
-        --data '{"first_name":"Micah", "last_name":"SleepHill", "email":"micah@calvin.edu", "phone":"555345123", "passwordHash":"hash26", "profileImgUrl":""}' \
+        --data '{"first_name":"Micah", "last_name":"SleepHill", "email":"micah@calvin.edu", "phone":"555345123", "password_hash":"hash26", "profile_image_url":""}' \
         ${SERVICE_URL}/users
 
 curl --request PUT \
         --header "Content-Type: application/json" \
-        --data '{"first_name":"Steve", "last_name":"Jones", "email":"steve@calvin.edu", "phone":"5558888888", "passwordHash":"hash67", "profileImgUrl":""}' \
+        --data '{"first_name":"Steve", "last_name":"Jones", "email":"steve@calvin.edu", "phone":"5558888888", "password_hash":"hash67", "profile_image_url":""}' \
         ${SERVICE_URL}/users/4
 
 curl --request DELETE \
@@ -20,13 +20,11 @@ curl --request DELETE \
 
 */
 
-/*
-export SERVICE_URL=http://localhost:3000
-
+/* Simple curl test of other post API endpoints
 curl --request POST \
         --header "Content-Type: application/json" \
         --data '{
-            "user_id": 1,
+            "user_id": 13,
             "title": "Tech Enthusiast",
             "about": "Looking to invest in innovative tech startups.",
             "experience": 10,
@@ -37,15 +35,15 @@ curl --request POST \
             "country": "USA",
             "industries": ["Technology", "Software"],
             "size_preference": "Small",
-            "timeline": "6 months",
+            "timeline": 6,
             "linkedin_url": ""
-            }'
+            }' \
         ${SERVICE_URL}/buyers
 
 curl --request POST \
-        -header "Content-Type: application/json" \
+        --header "Content-Type: application/json" \
         --data '{
-            "owner_id": 2,
+            "owner_id": 13,
             "name": "Tech Solutions Inc.",
             "industry": "Technology",
             "city": "Austin",
@@ -60,8 +58,8 @@ curl --request POST \
             "annual_revenue": 3000000,
             "monthly_revenue": 250000,
             "profit_margin": 20,
-            "timeline": "12 months",
+            "timeline": 12,
             "website": ""
-            }'
+            }' \
         ${SERVICE_URL}/listings
 */

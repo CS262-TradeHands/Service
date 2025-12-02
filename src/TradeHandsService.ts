@@ -46,6 +46,9 @@ router.get('/listings/:id', readListing);
 router.post('/users', createUser);
 router.post('/buyers', createBuyer);
 router.post('/listings', createListing);
+router.delete('/users/:id', deleteUser);
+router.delete('/buyers/:id', deleteBuyer);
+router.delete('/listings/:id', deleteListing);
 
 app.use(router);
 
@@ -129,6 +132,64 @@ function createUser(request: Request, response: Response, next: NextFunction): v
     )
         .then((data: {user_id: number}): void => {
             response.status(201).send(data);
+        })
+        .catch((error: Error): void => {
+            next(error);
+        });
+}
+
+/**
+ * Delete a user by id.
+ * Returns 204 No Content on successful deletion, or 404 if the user was not found.
+ */
+function deleteUser(request: Request, response: Response, next: NextFunction): void {
+    // Use db.result to get the number of affected rows
+    db.result('DELETE FROM AppUser WHERE user_id=$(id)', request.params)
+        .then((result: { rowCount?: number }): void => {
+            const count = (result && typeof result.rowCount === 'number') ? result.rowCount : 0;
+            if (count === 0) {
+                response.sendStatus(404);
+            } else {
+                response.sendStatus(204);
+            }
+        })
+        .catch((error: Error): void => {
+            next(error);
+        });
+}
+
+/**
+ * Delete a buyer profile by id.
+ * Returns 204 No Content on successful deletion, or 404 if the buyer profile was not found.
+ */
+function deleteBuyer(request: Request, response: Response, next: NextFunction): void {
+    db.result('DELETE FROM BuyerProfile WHERE buyer_id=$(id)', request.params)
+        .then((result: { rowCount?: number }): void => {
+            const count = (result && typeof result.rowCount === 'number') ? result.rowCount : 0;
+            if (count === 0) {
+                response.sendStatus(404);
+            } else {
+                response.sendStatus(204);
+            }
+        })
+        .catch((error: Error): void => {
+            next(error);
+        });
+}
+
+/**
+ * Delete a business listing by id.
+ * Returns 204 No Content on successful deletion, or 404 if the listing was not found.
+ */
+function deleteListing(request: Request, response: Response, next: NextFunction): void {
+    db.result('DELETE FROM BusinessListing WHERE business_id=$(id)', request.params)
+        .then((result: { rowCount?: number }): void => {
+            const count = (result && typeof result.rowCount === 'number') ? result.rowCount : 0;
+            if (count === 0) {
+                response.sendStatus(404);
+            } else {
+                response.sendStatus(204);
+            }
         })
         .catch((error: Error): void => {
             next(error);
