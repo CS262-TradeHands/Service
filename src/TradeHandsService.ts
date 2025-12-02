@@ -171,7 +171,7 @@ function deleteBuyer(request: Request, response: Response, next: NextFunction): 
     db.tx((t) => {
         return t.none('DELETE FROM ProfileMatch WHERE buyer_id=${id}', request.params)
             .then(() => {
-                return t.none('DELETE FROM BuyerProfile WHERE buyer_id=${id} RETURNING buyer_id', request.params);
+                return t.oneOrNone('DELETE FROM BuyerProfile WHERE buyer_id=${id} RETURNING buyer_id', request.params);
             });
     })
         .then((data: { buyer_id: number } | null): void => {
@@ -191,7 +191,7 @@ function deleteListing(request: Request, response: Response, next: NextFunction)
     db.tx((t) => {
         return t.none('DELETE FROM ProfileMatch WHERE business_id=${id}', request.params)
             .then(() => {
-                return t.none('DELETE FROM BusinessListing WHERE business_id=${id} RETURNING business_id', request.params);
+                return t.oneOrNone('DELETE FROM BusinessListing WHERE business_id=${id} RETURNING business_id', request.params);
             });
     })
         .then((data: { business_id: number } | null): void => {
