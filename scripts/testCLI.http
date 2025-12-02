@@ -1,4 +1,4 @@
-/* Simple curl tests of the user API endpoints.
+-- Simple curl tests of the user API endpoints.
 
 export SERVICE_URL=https://tradehands-bpgwcja7g5eqf2dp.canadacentral-01.azurewebsites.net
 
@@ -13,14 +13,14 @@ curl --request POST \
 curl --request PUT \
         --header "Content-Type: application/json" \
         --data '{"first_name":"Steve", "last_name":"Jones", "email":"steve@calvin.edu", "phone":"5558888888", "password_hash":"hash67", "profile_image_url":""}' \
-        ${SERVICE_URL}/users/4
+        ${SERVICE_URL}/users/13
 
 curl --request DELETE \
-        ${SERVICE_URL}/users/4
+        ${SERVICE_URL}/users/13
 
-*/
 
-/* Simple curl test of other post API endpoints
+-- Simple curl test of other post API endpoints
+
 curl --request POST \
         --header "Content-Type: application/json" \
         --data '{
@@ -62,4 +62,3 @@ curl --request POST \
             "website": ""
             }' \
         ${SERVICE_URL}/listings
-*/

@@ -42,10 +42,11 @@ router.get('/buyers/:id', readBuyer);
 router.get('/listings', readListings);
 router.get('/listings/:id', readListing);
 
-// Add simple POST endpoints
+
 router.post('/users', createUser);
 router.post('/buyers', createBuyer);
 router.post('/listings', createListing);
+
 router.delete('/users/:id', deleteUser);
 router.delete('/buyers/:id', deleteBuyer);
 router.delete('/listings/:id', deleteListing);
@@ -139,19 +140,22 @@ function createUser(request: Request, response: Response, next: NextFunction): v
 }
 
 /**
- * Delete a user by id.
- * Returns 204 No Content on successful deletion, or 404 if the user was not found.
+ * Delete a user by id, essentially acting as a delete all.
+ * Casades deletion of listing and profile records first using tx() to ensure all are deleted atomically.
+ * Returns the id of the user account that was deleted or 404 if the user account does not exist.
  */
 function deleteUser(request: Request, response: Response, next: NextFunction): void {
-    // Use db.result to get the number of affected rows
-    db.result('DELETE FROM AppUser WHERE user_id=$(id)', request.params)
-        .then((result: { rowCount?: number }): void => {
-            const count = (result && typeof result.rowCount === 'number') ? result.rowCount : 0;
-            if (count === 0) {
-                response.sendStatus(404);
-            } else {
-                response.sendStatus(204);
-            }
+    db.tx((t) => {
+        return t.none('DELETE FROM BuyerProfile WHERE user_id=${id}', request.params)
+            .then(() => {
+                return t.none('DELETE FROM BusinessListing WHERE owner_id=${id}', request.params);
+            })
+            .then(() => {
+                return t.oneOrNone('DELETE FROM AppUser WHERE user_id=${id} RETURNING user_id', request.params);
+            });
+    })
+        .then((data: { user_id: number } | null): void => {
+            returnDataOr404(response, data);
         })
         .catch((error: Error): void => {
             next(error);
@@ -160,17 +164,18 @@ function deleteUser(request: Request, response: Response, next: NextFunction): v
 
 /**
  * Delete a buyer profile by id.
- * Returns 204 No Content on successful deletion, or 404 if the buyer profile was not found.
+ * Casades deletion of ProfileMatch records first using tx() to ensure both are deleted atomically.
+ * Returns the id of the buyer profile that was deleted or 404 if the profile does not exist.
  */
 function deleteBuyer(request: Request, response: Response, next: NextFunction): void {
-    db.result('DELETE FROM BuyerProfile WHERE buyer_id=$(id)', request.params)
-        .then((result: { rowCount?: number }): void => {
-            const count = (result && typeof result.rowCount === 'number') ? result.rowCount : 0;
-            if (count === 0) {
-                response.sendStatus(404);
-            } else {
-                response.sendStatus(204);
-            }
+    db.tx((t) => {
+        return t.none('DELETE FROM ProfileMatch WHERE buyer_id=${id}', request.params)
+            .then(() => {
+                return t.none('DELETE FROM BuyerProfile WHERE buyer_id=${id} RETURNING buyer_id', request.params);
+            });
+    })
+        .then((data: { buyer_id: number } | null): void => {
+            returnDataOr404(response, data);
         })
         .catch((error: Error): void => {
             next(error);
@@ -179,17 +184,18 @@ function deleteBuyer(request: Request, response: Response, next: NextFunction): 
 
 /**
  * Delete a business listing by id.
- * Returns 204 No Content on successful deletion, or 404 if the listing was not found.
+ * Casades deletion of ProfileMatch records first using tx() to ensure both are deleted atomically.
+ * Returns the id of the business listing that was deleted or 404 if the listing does not exist.
  */
 function deleteListing(request: Request, response: Response, next: NextFunction): void {
-    db.result('DELETE FROM BusinessListing WHERE business_id=$(id)', request.params)
-        .then((result: { rowCount?: number }): void => {
-            const count = (result && typeof result.rowCount === 'number') ? result.rowCount : 0;
-            if (count === 0) {
-                response.sendStatus(404);
-            } else {
-                response.sendStatus(204);
-            }
+    db.tx((t) => {
+        return t.none('DELETE FROM ProfileMatch WHERE business_id=${id}', request.params)
+            .then(() => {
+                return t.none('DELETE FROM BusinessListing WHERE business_id=${id} RETURNING business_id', request.params);
+            });
+    })
+        .then((data: { business_id: number } | null): void => {
+            returnDataOr404(response, data);
         })
         .catch((error: Error): void => {
             next(error);
