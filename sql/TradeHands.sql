@@ -81,12 +81,12 @@ INSERT INTO AppUser (first_name, last_name, email, phone, profile_image_url, pas
 ('Sam', 'Patel', 'sam@craftbrewco.com', '5554567890', NULL, 'hash4', true, false),
 ('Dr. Priya', 'Sharma', 'priya@medicarplus.com', '5555678901', NULL, 'hash5', true, false),
 --Buyers
-('Khaled', 'Nguyen', 'khaled.nguyen@example.com', '5556789012', NULL, 'hash6', true, false),
-('Miriam', 'Reyes', 'miriam.reyes@example.com', '1555768901', NULL, 'hash7', true, false),
-('Bobby', 'Ortiz', 'bobby.ortiz@example.com', '5557890123', NULL, 'hash8', true, false),
-('Mickey', 'Turner', 'mickey.turner@example.com', '5558901234', NULL, 'hash9', true, false),
-('Sandra', 'Lopez', 'sandra.lopez@example.com', '5559012345', NULL, 'hash10', true, false),
-('Alex', 'Kim', 'alex.kim@example.com', '5550123456', NULL, 'hash11', true, false),
+('Khaled', 'Nguyen', 'khaled.nguyen@example.com', '5556789012', 'https://i1.sndcdn.com/artworks-nYQ1oTddy6X6wwWs-x7O5qg-t500x500.jpg', 'hash6', true, false),
+('Miriam', 'Reyes', 'miriam.reyes@example.com', '1555768901', 'https://pbs.twimg.com/profile_images/1940066429899886592/MdFIytQ8_400x400.jpg', 'hash7', true, false),
+('Bobby', 'Ortiz', 'bobby.ortiz@example.com', '5557890123', 'https://scottdavidbrown.wordpress.com/wp-content/uploads/2013/01/haa_0004.jpg?w=924', 'hash8', true, false),
+('Mickey', 'Turner', 'mickey.turner@example.com', '5558901234', 'https://cdn.miiwiki.org/8/85/Default_Male_Mii.png', 'hash9', true, false),
+('Sandra', 'Lopez', 'sandra.lopez@example.com', '5559012345', 'https://cdn.miiwiki.org/2/2b/Default_Female_Mii.png', 'hash10', true, false),
+('Alex', 'Kim', 'alex.kim@example.com', '5550123456', 'https://cdn.miiwiki.org/3/3c/WSC_Millie.png', 'hash11', true, false),
 --Special
 ('Holger', 'Woerner', 'Holger.Woerner@bakery.com', '491635551584', NULL, 'hash12', true, false);
 
