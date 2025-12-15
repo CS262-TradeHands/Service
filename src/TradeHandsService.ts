@@ -9,6 +9,8 @@
 import 'dotenv/config' // Load environment variables from .env
 import express from 'express';
 import pgPromise from 'pg-promise';
+import cors from "cors";
+
 
 // Import types for compile-time checking.
 import type { Request, Response, NextFunction } from 'express';
@@ -52,6 +54,11 @@ router.delete('/buyers/:id', deleteBuyer);
 router.delete('/listings/:id', deleteListing);
 
 app.use(router);
+app.use(cors({
+  origin: "*", // quick dev fix (better: restrict to your vercel domain)
+  methods: ["GET", "POST", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
 
 // Custom error handler - must be defined AFTER all routes
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction): void => {
