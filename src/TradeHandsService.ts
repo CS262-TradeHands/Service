@@ -41,7 +41,6 @@ app.use(cors({
   methods: ["GET", "POST", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 }));
-app.options("*", cors()); // important for preflight
 
 const port: number = parseInt(process.env.PORT as string) || 3000;
 const router = express.Router();
@@ -309,7 +308,7 @@ function createListing(request: Request, response: Response, next: NextFunction)
          RETURNING business_id`,
         request.body as ListingInput
     )
-        .then((data: {buisness_id: number}): void => {
+        .then((data: {business_id: number}): void => {
             response.status(201).send(data);
         })
         .catch((error: Error): void => {
