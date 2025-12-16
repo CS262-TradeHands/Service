@@ -88,7 +88,8 @@ INSERT INTO AppUser (first_name, last_name, email, phone, profile_image_url, pas
 ('Sandra', 'Lopez', 'sandra.lopez@example.com', '5559012345', 'https://cdn.miiwiki.org/2/2b/Default_Female_Mii.png', 'hash10', true, false),
 ('Alex', 'Kim', 'alex.kim@example.com', '5550123456', 'https://cdn.miiwiki.org/3/3c/WSC_Millie.png', 'hash11', true, false),
 --Special
-('Holger', 'Woerner', 'Holger.Woerner@bakery.com', '491635551584', NULL, 'hash12', true, false);
+('Holger', 'Woerner', 'Holger.Woerner@bakery.com', '491635551584', NULL, 'hash12', true, false),
+('Lukas', 'Müller', 'lukas.mueller@example.de', '491635551584', 'https://cdn.miiwiki.org/a/ad/WS_Guest_B.png', 'hash13', true, false);
 
 INSERT INTO BusinessListing (owner_id, name, industry, asking_price_lower_bound, asking_price_upper_bound, city, state, country, description, employees, years_in_operation, annual_revenue, monthly_revenue, profit_margin, timeline, website, image_url)
 VALUES
@@ -106,7 +107,8 @@ VALUES
 (8, 'Denver', 'Colorado', 'USA', 'Service Business Investor', ARRAY['Service', 'Cleaning'], 'Private investor seeking profitable service-based businesses with recurring revenue.', 300000, 1000000, 8.0, 3, 'Medium', NULL),
 (9, 'Portland', 'Oregon', 'USA', 'Brewery Enthusiast', ARRAY['Food & Beverage'], 'Craft beer enthusiast looking to aquire established breweries or taprooms.', 400000, 1500000, 5.0, 9, 'Small', NULL),
 (10, 'Miami', 'Florida', 'USA', 'Healthcare Investor', ARRAY['Healthcare'], 'Healthcare professional seeking to acquire medical practices and healthcare services.', 600000, 3000000, 12.0, 3, 'Small', NULL),
-(11, 'Seattle', 'Washington', 'USA', 'Tech Acquirer', ARRAY['Tech'], 'Tech executive looking to acquire software companies and tehc-enabled services.', 750000, 5000000, 20.0, 3, 'Large', NULL);
+(11, 'Seattle', 'Washington', 'USA', 'Tech Acquirer', ARRAY['Tech'], 'Tech executive looking to acquire software companies and tehc-enabled services.', 750000, 5000000, 20.0, 3, 'Large', NULL),
+(13, 'Jettingen', NULL, 'Germany', 'Bakery Buyer / Apprentice Owner', ARRAY['Food & Beverage','Bakery'], 'Young baker with family background in artisan baking and experience managing small bakery operations.', 700000, 1200000, 6.0, 8, 'Small', NULL);
 
 INSERT INTO ProfileMatch (buyer_id, business_id, rating)
 VALUES
@@ -114,5 +116,6 @@ VALUES
 (2, 2, 83),
 (3, 3, 79),
 (4, 4, 65),
-(5, 5, 75);
+(5, 5, 75),
+(7, 6, 75);
 
