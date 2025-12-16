@@ -30,6 +30,19 @@ const db = pgPromise()({
 
 // Configure the server and its routes
 const app = express();
+
+app.use(cors({
+  origin: [
+    "https://tradehands.vercel.app",
+    // optional: allow local dev too
+    "http://localhost:19006",
+    "http://localhost:3000"
+  ],
+  methods: ["GET", "POST", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
+app.options("*", cors()); // important for preflight
+
 const port: number = parseInt(process.env.PORT as string) || 3000;
 const router = express.Router();
 
@@ -54,11 +67,6 @@ router.delete('/buyers/:id', deleteBuyer);
 router.delete('/listings/:id', deleteListing);
 
 app.use(router);
-app.use(cors({
-  origin: "*", // quick dev fix (better: restrict to your vercel domain)
-  methods: ["GET", "POST", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-}));
 
 // Custom error handler - must be defined AFTER all routes
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction): void => {
