@@ -354,8 +354,8 @@ function readMatch(request: Request, response: Response, next: NextFunction): vo
  */
 function createMatch(request: Request, response: Response, next: NextFunction): void {
     db.one(
-        `INSERT INTO ProfileMatch (buyer_id, business_id)
-         VALUES ($(buyer_id), $(business_id))
+        `INSERT INTO ProfileMatch (buyer_id, business_id, sentFromBusToBuy)
+         VALUES ($(buyer_id), $(business_id), $(sentFromBusToBuy))
          RETURNING interest_id`,
         request.body as MatchInput
     )
