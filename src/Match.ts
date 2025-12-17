@@ -9,10 +9,12 @@ export interface Match {
     id: number;
     buyer_id: number;
     business_id: number;
+    sentFromBusToBuy: boolean;
     created_at: string;
 }
 
 export interface MatchInput {
     buyer_id: number;
     business_id: number;
+    sentFromBusToBuy: boolean;
 }
