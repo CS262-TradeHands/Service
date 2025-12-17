@@ -13,12 +13,16 @@ At this URL, the following endpoints are implemented:
 * `/buyers/:id` &mdash; the single buyer profile with the given ID (e.g., `/buyers/1`)
 * `/listings` &mdash; the full list of business listings
 * `/listings/:id` &mdash; the single business listing with the given ID (e.g., `/listings/1`)
+* `/matches` &mdash; the full list of interest matches
+* `/matches/:id` &mdash; the single interest match with the given ID (e.g., `/matches/1`)
 * POST `/users` &mdash; adds a user account to the database and returns it's automatically generated user id
 * POST `/buyers` &mdash; adds a buyer profile to the database and returns it's automatically generated buyer id
 * POST `/listings` &mdash; adds a business listing to the database and returns it's automatically generated business id
+* POST `/matches` &mdash; adds an interest match to the database and returns it's automatically generated interest id
 * DELETE `/users/:id` &mdash; deletes a user by id and all associated listings and buyer profiles, returning the deleted id
 * DELETE `/buyers/:id` &mdash; deletes a buyer profile by id and all associated matches, returning the deleted id
 * DELETE `/listings/:id` &mdash; deletes a listing by id and all associated matches, returning the deleted id
+* DELETE `/matches/:id` &mdash; deletes an interest match by id and returns the deleted id
 
 It is based on the standard Azure App Service tutorial for Node.js.
 
