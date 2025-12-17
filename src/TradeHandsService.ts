@@ -17,6 +17,7 @@ import type { Request, Response, NextFunction } from 'express';
 import type { User, UserInput } from "./User.js";
 import type { Buyer, BuyerInput } from "./Buyer.js";
 import type { Listing, ListingInput } from "./Listing.js"
+import type { Match, MatchInput } from "./Match.js"
 
 
 // Set up the database
@@ -64,6 +65,11 @@ router.post('/listings', createListing);
 router.delete('/users/:id', deleteUser);
 router.delete('/buyers/:id', deleteBuyer);
 router.delete('/listings/:id', deleteListing);
+
+router.get('/matches', readMatches);
+router.get('/matches/:id', readMatch);
+router.post('/matches', createMatch);
+router.delete('/matches/:id', deleteMatch);
 
 app.use(router);
 
@@ -310,6 +316,67 @@ function createListing(request: Request, response: Response, next: NextFunction)
     )
         .then((data: {business_id: number}): void => {
             response.status(201).send(data);
+        })
+        .catch((error: Error): void => {
+            next(error);
+        });
+}
+
+/**
+ * Retrieves all interest matches from the database.
+ */
+function readMatches(_request: Request, response: Response, next: NextFunction): void {
+    db.manyOrNone('SELECT * FROM ProfileMatch')
+        .then((data: Match[]): void => {
+            // data is a list, never null, so returnDataOr404 isn't needed.
+            response.send(data);
+        })
+        .catch((error: Error): void => {
+            next(error);
+        });
+}
+
+/**
+ * Retrieves one specific interest match from the database by ID.
+ */
+function readMatch(request: Request, response: Response, next: NextFunction): void {
+    db.oneOrNone('SELECT * FROM ProfileMatch WHERE interest_id=${id}', request.params)
+        .then((data: Match | null): void => {
+            returnDataOr404(response, data);
+        })
+        .catch((error: Error): void => {
+            next(error);
+        });
+}
+
+/**
+ * Creates an interest match and posts it to the database.
+ */
+function createMatch(request: Request, response: Response, next: NextFunction): void {
+    db.one(
+        `INSERT INTO ProfileMatch (buyer_id, business_id)
+         VALUES ($(buyer_id), $(business_id))
+         RETURNING interest_id`,
+        request.body as MatchInput
+    )
+        .then((data: {interest_id: number}): void => {
+            response.status(201).send(data);
+        })
+        .catch((error: Error): void => {
+            next(error);
+        });
+}
+
+/**
+ * Delete an interest match by id.
+ * Returns the id of the interest match that was deleted or 404 if the profile does not exist.
+ */
+function deleteMatch(request: Request, response: Response, next: NextFunction): void {
+    db.tx((t) => {
+        return t.none('DELETE FROM ProfileMatch WHERE interest_id=${id}', request.params)
+    })
+        .then((data: { interest_id: number } | null): void => {
+            returnDataOr404(response, data);
         })
         .catch((error: Error): void => {
             next(error);
