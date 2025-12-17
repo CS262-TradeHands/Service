@@ -372,9 +372,7 @@ function createMatch(request: Request, response: Response, next: NextFunction): 
  * Returns the id of the interest match that was deleted or 404 if the profile does not exist.
  */
 function deleteMatch(request: Request, response: Response, next: NextFunction): void {
-    db.tx((t) => {
-        return t.none('DELETE FROM ProfileMatch WHERE interest_id=${id}', request.params)
-    })
+    db.oneOrNone('DELETE FROM ProfileMatch WHERE interest_id=${id} RETURNING interest_id', request.params)
         .then((data: { interest_id: number } | null): void => {
             returnDataOr404(response, data);
         })
