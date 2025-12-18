@@ -10,6 +10,7 @@ import 'dotenv/config' // Load environment variables from .env
 import express from 'express';
 import pgPromise from 'pg-promise';
 import cors from "cors";
+import bcrypt from 'bcrypt';
 
 
 // Import types for compile-time checking.
@@ -50,6 +51,7 @@ router.use(express.json());
 router.get('/', readHello);
 router.get('/users', readUsers);
 router.get('/users/:id', readUser);
+router.post('/login', loginUser);
 
 router.get('/buyers', readBuyers);
 router.get('/buyers/:id', readBuyer);
@@ -141,18 +143,59 @@ function readUser(request: Request, response: Response, next: NextFunction): voi
 
 /**
  * Create a new user.
- * Expects body with: first_name, last_name, email, phone?, password_hash, profile_image_url?, verified?, private?
+ * Expects body with: first_name, last_name, email, phone?, password, profile_image_url?
  * Returns the created user (including user_id).
  */
 function createUser(request: Request, response: Response, next: NextFunction): void {
-    db.one(
-        `INSERT INTO AppUser (first_name, last_name, email, phone, password_hash, profile_image_url, verified, private)
-         VALUES ($(first_name), $(last_name), $(email), $(phone), $(password_hash), $(profile_image_url), false, false)
-         RETURNING user_id`,
-        request.body as UserInput
-    )
+    const userInput = request.body as UserInput;
+
+    bcrypt.hash(userInput.password, 10)
+        .then((password_hash: string) => {
+            return db.one(
+                `INSERT INTO AppUser (first_name, last_name, email, phone, password_hash, profile_image_url, verified, private)
+                 VALUES ($(first_name), $(last_name), $(email), $(phone), $(password_hash), $(profile_image_url), false, false)
+                 RETURNING user_id`,
+                { ...userInput, password_hash }
+            );
+        })
         .then((data: {user_id: number}): void => {
             response.status(201).send(data);
+        })
+        .catch((error: Error): void => {
+            next(error);
+        });
+}
+
+/**
+ * Login a user by verifying email and password.
+ * Expects body with: email, password.
+ * Returns user data without password_hash if valid.
+ */
+function loginUser(request: Request, response: Response, next: NextFunction): void {
+    const { email, password } = request.body as { email: string; password: string };
+
+    if (!email || !password) {
+        response.status(400).json({ error: 'Email and password are required' });
+        return;
+    }
+
+    db.oneOrNone('SELECT * FROM AppUser WHERE email=${email}', { email })
+        .then((user: User | null) => {
+            if (!user) {
+                response.status(401).json({ error: 'Invalid email or password' });
+                return;
+            }
+
+            return bcrypt.compare(password, user.password_hash)
+                .then((isValid: boolean) => {
+                    if (!isValid) {
+                        response.status(401).json({ error: 'Invalid email or password' });
+                        return;
+                    }
+
+                    const {  ...userWithoutPassword } = user as User & { password_hash: string };
+                    response.status(200).json(userWithoutPassword);
+                });
         })
         .catch((error: Error): void => {
             next(error);

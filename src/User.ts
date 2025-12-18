@@ -23,6 +23,6 @@ export interface UserInput {
     last_name: string;
     email: string;
     phone?: string;
-    password_hash: string;
+    password: string;
     profile_image_url?: string;
 }
