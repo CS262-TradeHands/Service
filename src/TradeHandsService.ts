@@ -10,7 +10,6 @@ import 'dotenv/config' // Load environment variables from .env
 import express from 'express';
 import pgPromise from 'pg-promise';
 import cors from "cors";
-import bcrypt from 'bcrypt';
 
 
 // Import types for compile-time checking.
