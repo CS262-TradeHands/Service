@@ -10,6 +10,7 @@ import 'dotenv/config' // Load environment variables from .env
 import express from 'express';
 import pgPromise from 'pg-promise';
 import cors from "cors";
+import bcrypt from 'bcrypt';
 
 
 // Import types for compile-time checking.
@@ -141,65 +142,58 @@ function readUser(request: Request, response: Response, next: NextFunction): voi
 }
 
 /**
- * Create a new user.
- * Expects body with: first_name, last_name, email, phone?, password, profile_image_url?
- * Returns the created user (including user_id).
+ * Login endpoint - authenticates user with email and password.
+ * Expects body with: { email: string, password: string }
+ * Returns user data (without password_hash) if credentials are valid, or 401 if invalid.
  */
-function createUser(request: Request, response: Response, next: NextFunction): void {
-    const userInput = request.body as UserInput;
-
-    bcrypt.hash(userInput.password, 10)
-        .then((password_hash: string) => {
-            return db.one(
-                `INSERT INTO AppUser (first_name, last_name, email, phone, password_hash, profile_image_url, verified, private)
-                 VALUES ($(first_name), $(last_name), $(email), $(phone), $(password_hash), $(profile_image_url), false, false)
-                 RETURNING user_id`,
-                { ...userInput, password_hash }
-            );
-        })
-        .then((data: {user_id: number}): void => {
-            response.status(201).send(data);
-        })
-        .catch((error: Error): void => {
-            next(error);
-        });
-}
-
-/**
- * Login a user by verifying email and password.
- * Expects body with: email, password.
- * Returns user data without password_hash if valid.
- */
-function loginUser(request: Request, response: Response, next: NextFunction): void {
-    const { email, password } = request.body as { email: string; password: string };
-
-    if (!email || !password) {
-        response.status(400).json({ error: 'Email and password are required' });
-        return;
+async function loginUser(request: Request, response: Response, next: NextFunction): Promise<void> {
+    try {
+        const { email, password } = request.body as { email: string; password: string };
+        
+        // Find user by email
+        const user = await db.oneOrNone('SELECT * FROM AppUser WHERE email=$(email)', { email }) as User | null;
+        
+        if (!user) {
+            response.status(401).json({ error: 'Invalid email or password' });
+            return;
+        }
+        
+        // Compare provided password with stored hash
+        const isValidPassword = await bcrypt.compare(password, user.password_hash);
+        
+        if (!isValidPassword) {
+            response.status(401).json({ error: 'Invalid email or password' });
+            return;
+        }
+        
+        // Return user data without password_hash
+        const { password_hash, ...userWithoutPassword } = user;
+        void password_hash; // Silence unused variable warning
+        response.json(userWithoutPassword);
+    } catch (error) {
+        next(error);
     }
-
-    db.oneOrNone('SELECT * FROM AppUser WHERE email=${email}', { email })
-        .then((user: User | null) => {
-            if (!user) {
-                response.status(401).json({ error: 'Invalid email or password' });
-                return;
-            }
-
-            return bcrypt.compare(password, user.password_hash)
-                .then((isValid: boolean) => {
-                    if (!isValid) {
-                        response.status(401).json({ error: 'Invalid email or password' });
-                        return;
-                    }
-
-                    const {  ...userWithoutPassword } = user as User & { password_hash: string };
-                    response.status(200).json(userWithoutPassword);
-                });
-        })
-        .catch((error: Error): void => {
-            next(error);
-        });
 }
+async function createUser(request: Request, response: Response, next: NextFunction): Promise<void> {
+    try {
+        const { password, ...userData } = request.body as UserInput & { password: string };
+        
+        // Hash the password with bcrypt (salt rounds = 10)
+        const password_hash = await bcrypt.hash(password, 10);
+        
+        const data = await db.one(
+            `INSERT INTO AppUser (first_name, last_name, email, phone, password_hash, profile_image_url, verified, private)
+             VALUES ($(first_name), $(last_name), $(email), $(phone), $(password_hash), $(profile_image_url), false, false)
+             RETURNING user_id`,
+            { ...userData, password_hash }
+        );
+        
+        response.status(201).send(data);
+    } catch (error) {
+        next(error);
+    }
+}
+
 
 /**
  * Delete a user by id, essentially acting as a delete all.
