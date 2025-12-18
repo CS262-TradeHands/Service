@@ -66,7 +66,7 @@ CREATE TABLE ProfileMatch (
     interest_id SERIAL PRIMARY KEY,
     buyer_id INT REFERENCES BuyerProfile(buyer_id) ON DELETE CASCADE,
     business_id INT REFERENCES BusinessListing(business_id) ON DELETE CASCADE,
-    sent_from_bus_to_buy BOOLEAN, -- determines whether the notification should appear in the sent or received inbox
+    rating INT,     --percent that represents how strong the match is
     created_at TIMESTAMP DEFAULT NOW(),
     UNIQUE (buyer_id, business_id)
 );
@@ -75,21 +75,21 @@ CREATE TABLE ProfileMatch (
 
 INSERT INTO AppUser (first_name, last_name, email, phone, profile_image_url, password_hash, verified, private) VALUES
 --Owners
-('David', 'Chen', 'david@techstartsolutions.com', '5551234567', NULL, '$2b$10$vpAsWcoFQCXZEHWZHbM8GuANYEdqKpavJ4gBoL0RImvYjkirSzkSO', true, false),
-('Isabella', 'Moore', 'isabella@bellaboutique.com', '5552345678', NULL, '$2b$10$PtA9rvv.udnLQcPm8G6xt.qvH7tmOOrLGKPCnqpBLaUrBn7YXeRE.', true, false),
-('Miguel', 'Alvarez', 'miguel@greenclean.co', '5553456789', NULL, '$2b$10$CaFz8ohogUeSxzJTH5epSOWt/U4c9Ji/3QuXT3DR36yTkjCt1T.ea', true, false),
-('Sam', 'Patel', 'sam@craftbrewco.com', '5554567890', NULL, '$2b$10$3/KdperLAjwmjCSm863d5OSXbscXXUiadpYtXkMJpAzOtaHU.3pt6', true, false),
-('Priya', 'Sharma', 'priya@medicarplus.com', '5555678901', NULL, '$2b$10$X9O.VmNE2HFlKHK40or/DeMr88ZJnM3K7O7tmH5F.X1XGxROVZly6', true, false),
+('David', 'Chen', 'david@techstartsolutions.com', '5551234567', NULL, 'hash1', true, false),
+('Isabella', 'Moore', 'isabella@bellaboutique.com', '5552345678', NULL, 'hash2', true, false),
+('Miguel', 'Alvarez', 'miguel@greenclean.co', '5553456789', NULL, 'hash3', true, false),
+('Sam', 'Patel', 'sam@craftbrewco.com', '5554567890', NULL, 'hash4', true, false),
+('Dr. Priya', 'Sharma', 'priya@medicarplus.com', '5555678901', NULL, 'hash5', true, false),
 --Buyers
-('Khaled', 'Nguyen', 'khaled.nguyen@example.com', '5556789012', 'https://i1.sndcdn.com/artworks-nYQ1oTddy6X6wwWs-x7O5qg-t500x500.jpg', '$2b$10$7zA4YEaCQQD0AFsDUdrS7.EBE997T/vqTwbEhIt367NJuR7Sjg7w.', true, false),
-('Miriam', 'Reyes', 'miriam.reyes@example.com', '1555768901', 'https://pbs.twimg.com/profile_images/1940066429899886592/MdFIytQ8_400x400.jpg', '$2b$10$uxToYIMLW37czzlvjyHnOetIeK85FL86Lk/AoywlaDKoNhZ1GCYem', true, false),
-('Bobby', 'Ortiz', 'bobby.ortiz@example.com', '5557890123', 'https://scottdavidbrown.wordpress.com/wp-content/uploads/2013/01/haa_0004.jpg?w=924', '$2b$10$ja2sbQpo1nPXmUG0liM9S.4rdF2.aQFu9RuZQpP6TJH1UOrlKUr8a', true, false),
-('Mickey', 'Turner', 'mickey.turner@example.com', '5558901234', 'https://cdn.miiwiki.org/8/85/Default_Male_Mii.png', '$2b$10$HCYmS4YaL8dVxsuVT5ruLOZnS8hPzPhgCG6tO8NbqyLYrO9bWZ5GC', true, false),
-('Sandra', 'Lopez', 'sandra.lopez@example.com', '5559012345', 'https://cdn.miiwiki.org/2/2b/Default_Female_Mii.png', '$2b$10$qF8AFT3zjTZcnoLl7bXUaO01pqsEWLTBNB3tyN.k21J3DI/BfeTly', true, false),
-('Alex', 'Kim', 'alex.kim@example.de', '5550123456', 'https://cdn.miiwiki.org/3/3c/WSC_Millie.png', '$2b$10$CIHKYjaIhOX8ArII.GiMReb13Sei/IC2gyL/8pWB7N5EHXi1/emhy', true, false),
+('Khaled', 'Nguyen', 'khaled.nguyen@example.com', '5556789012', 'https://i1.sndcdn.com/artworks-nYQ1oTddy6X6wwWs-x7O5qg-t500x500.jpg', 'hash6', true, false),
+('Miriam', 'Reyes', 'miriam.reyes@example.com', '1555768901', 'https://pbs.twimg.com/profile_images/1940066429899886592/MdFIytQ8_400x400.jpg', 'hash7', true, false),
+('Bobby', 'Ortiz', 'bobby.ortiz@example.com', '5557890123', 'https://scottdavidbrown.wordpress.com/wp-content/uploads/2013/01/haa_0004.jpg?w=924', 'hash8', true, false),
+('Mickey', 'Turner', 'mickey.turner@example.com', '5558901234', 'https://cdn.miiwiki.org/8/85/Default_Male_Mii.png', 'hash9', true, false),
+('Sandra', 'Lopez', 'sandra.lopez@example.com', '5559012345', 'https://cdn.miiwiki.org/2/2b/Default_Female_Mii.png', 'hash10', true, false),
+('Alex', 'Kim', 'alex.kim@example.com', '5550123456', 'https://cdn.miiwiki.org/3/3c/WSC_Millie.png', 'hash11', true, false),
 --Special
-('Holger', 'Woerner', 'Holger.Woerner@bakery.com', '491635551584', NULL, '$2b$10$1JensYMoauwfpGJ/SRan0e7W2lFFaBhsGlKkpvv/1CVYKHWmAyZ8q', true, false),
-('Lukas', 'Müller', 'lukas.mueller@example.de', '491635551584', 'https://cdn.miiwiki.org/a/ad/WS_Guest_B.png', '$2b$10$cCGeYtZu3sacPx5wx0Mq1eROsn0vla.AW0sEnOb3uDDonmL5Zzu9.', true, false);
+('Holger', 'Woerner', 'Holger.Woerner@bakery.com', '491635551584', NULL, 'hash12', true, false),
+('Lukas', 'Müller', 'lukas.mueller@example.de', '491635551584', 'https://cdn.miiwiki.org/a/ad/WS_Guest_B.png', 'hash13', true, false);
 
 INSERT INTO BusinessListing (owner_id, name, industry, asking_price_lower_bound, asking_price_upper_bound, city, state, country, description, employees, years_in_operation, annual_revenue, monthly_revenue, profit_margin, timeline, website, image_url)
 VALUES
@@ -110,12 +110,12 @@ VALUES
 (11, 'Seattle', 'Washington', 'USA', 'Tech Acquirer', ARRAY['Tech'], 'Tech executive looking to acquire software companies and tehc-enabled services.', 750000, 5000000, 20.0, 3, 'Large', NULL),
 (13, 'Jettingen', NULL, 'Germany', 'Bakery Buyer / Apprentice Owner', ARRAY['Food & Beverage','Bakery'], 'Young baker with family background in artisan baking and experience managing small bakery operations.', 700000, 1200000, 6.0, 8, 'Small', NULL);
 
-INSERT INTO ProfileMatch (buyer_id, business_id, sent_from_bus_to_buy)
+INSERT INTO ProfileMatch (buyer_id, business_id, rating)
 VALUES
-(1, 1, FALSE),
-(2, 2, TRUE),
-(3, 3, TRUE),
-(4, 4, FALSE),
-(5, 5, FALSE),
-(7, 6, TRUE);
+(1, 1, 90),
+(2, 2, 83),
+(3, 3, 79),
+(4, 4, 65),
+(5, 5, 75),
+(7, 6, 75);
 
