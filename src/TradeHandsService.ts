@@ -174,12 +174,6 @@ async function loginUser(request: Request, response: Response, next: NextFunctio
         next(error);
     }
 }
-
-/**
- * Create a new user.
- * Expects body with: first_name, last_name, email, phone?, password, profile_image_url?, verified?, private?
- * The password will be hashed before storing. Returns the created user (including user_id).
- */
 async function createUser(request: Request, response: Response, next: NextFunction): Promise<void> {
     try {
         const { password, ...userData } = request.body as UserInput & { password: string };
@@ -200,41 +194,6 @@ async function createUser(request: Request, response: Response, next: NextFuncti
     }
 }
 
-/**
- * Login a user by verifying email and password.
- * Expects body with: email, password.
- * Returns user data without password_hash if valid.
- */
-function loginUser(request: Request, response: Response, next: NextFunction): void {
-    const { email, password } = request.body as { email: string; password: string };
-
-    if (!email || !password) {
-        response.status(400).json({ error: 'Email and password are required' });
-        return;
-    }
-
-    db.oneOrNone('SELECT * FROM AppUser WHERE email=${email}', { email })
-        .then((user: User | null) => {
-            if (!user) {
-                response.status(401).json({ error: 'Invalid email or password' });
-                return;
-            }
-
-            return bcrypt.compare(password, user.password_hash)
-                .then((isValid: boolean) => {
-                    if (!isValid) {
-                        response.status(401).json({ error: 'Invalid email or password' });
-                        return;
-                    }
-
-                    const {  ...userWithoutPassword } = user as User & { password_hash: string };
-                    response.status(200).json(userWithoutPassword);
-                });
-        })
-        .catch((error: Error): void => {
-            next(error);
-        });
-}
 
 /**
  * Delete a user by id, essentially acting as a delete all.
