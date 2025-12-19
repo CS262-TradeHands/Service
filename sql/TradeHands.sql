@@ -66,9 +66,9 @@ CREATE TABLE ProfileMatch (
     interest_id SERIAL PRIMARY KEY,
     buyer_id INT REFERENCES BuyerProfile(buyer_id) ON DELETE CASCADE,
     business_id INT REFERENCES BusinessListing(business_id) ON DELETE CASCADE,
-    rating INT,     --percent that represents how strong the match is
+    sent_from_bus_to_buy BOOLEAN,
     created_at TIMESTAMP DEFAULT NOW(),
-    UNIQUE (buyer_id, business_id)
+    UNIQUE (buyer_id, business_id, sent_from_bus_to_buy)
 );
 
 -- SAMPLE DATA (matches the mock data in Client)
@@ -110,12 +110,12 @@ VALUES
 (11, 'Seattle', 'Washington', 'USA', 'Tech Acquirer', ARRAY['Tech'], 'Tech executive looking to acquire software companies and tehc-enabled services.', 750000, 5000000, 20.0, 3, 'Large', NULL),
 (13, 'Jettingen', NULL, 'Germany', 'Bakery Buyer / Apprentice Owner', ARRAY['Food & Beverage','Bakery'], 'Young baker with family background in artisan baking and experience managing small bakery operations.', 700000, 1200000, 6.0, 8, 'Small', NULL);
 
-INSERT INTO ProfileMatch (buyer_id, business_id, rating)
+INSERT INTO ProfileMatch (buyer_id, business_id, sent_from_bus_to_buy)
 VALUES
-(1, 1, 90),
-(2, 2, 83),
-(3, 3, 79),
-(4, 4, 65),
-(5, 5, 75),
-(7, 6, 75);
+(1, 1, true),
+(2, 2, false),
+(3, 3, true),
+(4, 4, true),
+(5, 5, false),
+(7, 6, true);
 
